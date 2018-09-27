@@ -179,13 +179,21 @@ def mainOptions():
 
 def openDocs():
     for doc in os.listdir("./cranfield.all"):
-        parseDoc(doc)
+        print(parseDoc(doc))
 
 def parseDoc(document):
     doc = minidom.parse("./cranfield.all/" + document)
     textElement = doc.getElementsByTagName('TEXT')[0]
-    textContent = text.firstChild.data
+    textContent = textElement.firstChild.data
+    print(getDocNo(document))
     return textContent
+
+def getDocNo(document):
+    doc = minidom.parse("./cranfield.all/" + document)
+    numberElement = doc.getElementsByTagName('DOCNO')[0]
+    number = numberElement.firstChild.data
+    return number
+
 
 
 # This part is  for read, tokenize and create the dictionary

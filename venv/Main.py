@@ -6,6 +6,8 @@ import pprint
 import nltk
 from nltk.tokenize import word_tokenize
 from collections import defaultdict
+#import untangle
+from xml.dom import minidom
 
 
 def tokenize(text):
@@ -175,7 +177,19 @@ def mainOptions():
 
 # THIS IS THE BEGINNING OF THE PROGRAM
 
+def openDocs():
+    for doc in os.listdir("./cranfield.all"):
+        parseDoc(doc)
+
+def parseDoc(document):
+    doc = minidom.parse("./cranfield.all/" + document)
+    textElement = doc.getElementsByTagName('TEXT')[0]
+    textContent = text.firstChild.data
+    return textContent
+
+
 # This part is  for read, tokenize and create the dictionary
+'''
 dictionary = {}
 documents = sys.argv[1:]
 for i in documents:
@@ -185,4 +199,7 @@ for i in documents:
 print("YOUR INVERTED INDEX IS READY!")
 print()
 mainOptions()
+'''
+
+openDocs()
 

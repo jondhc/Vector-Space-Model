@@ -38,6 +38,8 @@ def showDictionary(arg):
 def getPosting(key):
     return dictionary[key]
 
+#######################################################
+
 def performAndQuery(post1, post2):
     results = []
     for i in post1:
@@ -80,6 +82,8 @@ def performOrQueryNotQuery(term1, term2):  # not - or
 
 def performOrQueryAndQuery(term1, term2, term3):  # or - and
     return list(performAndQuery((performOrQuery((getPosting(term1)), (getPosting(term2)))), (getPosting(term3))))
+
+#######################################################
 
 
 def makeQuerys():
@@ -156,6 +160,8 @@ def makeQuerys():
         print("Your option is invalid. Please try again")
         makeQuerys()
 
+#######################################################
+
 
 def mainOptions():
     print()
@@ -184,8 +190,7 @@ def mainOptions():
         print("Thanks for comming!")
         sys.exit()
 
-
-# THIS IS THE BEGINNING OF THE PROGRAM
+#######################################################
 
 def openDocs():
     for doc in os.listdir("./cranfield.all"):
@@ -206,7 +211,10 @@ def getDocNo(document):
 
 
 
-# This part is  for read, tokenize and create the dictionary
+#######################################################
+###################### MAIN
+#######################################################
+
 '''
 dictionary = {}
 documents = sys.argv[1:]
@@ -218,6 +226,8 @@ print("YOUR INVERTED INDEX IS READY!")
 print()
 mainOptions()
 '''
+
+#######################################################
 
 #openDocs()
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031

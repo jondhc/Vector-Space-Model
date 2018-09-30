@@ -6,8 +6,12 @@ import pprint
 import nltk
 from nltk.tokenize import word_tokenize
 from collections import defaultdict
-#import untangle
 from xml.dom import minidom
+import math
+#import untangle
+
+def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
+    return math.log((totalNumberOfDocuments/documentsWithTermAppearance))
 
 
 def tokenize(text):
@@ -209,5 +213,5 @@ print()
 mainOptions()
 '''
 
-openDocs()
+#openDocs()
 

@@ -13,6 +13,12 @@ import math
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
     return math.log((totalNumberOfDocuments/documentsWithTermAppearance))
 
+def similarityCoefficient(queryVector, documentVector):
+    result = 0
+    for i in range(0, len(queryVector)):
+        result = result + (queryVector[i] * documentVector[i])
+    return result
+
 
 def tokenize(text):
     tokens = set(word_tokenize(text))
@@ -214,4 +220,5 @@ mainOptions()
 '''
 
 #openDocs()
+#print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

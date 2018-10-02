@@ -12,6 +12,7 @@ import math
 import collections
 #import untangle
 dictionary = {}
+idfDictionary = {}
 
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
     return math.log((totalNumberOfDocuments/documentsWithTermAppearance))
@@ -226,12 +227,20 @@ def createTermDictionary(docNo, text):
         if token not in stopWordsSet:
             tokensListWOStopwords.append(token)
     tokensCounter = collections.Counter(tokensListWOStopwords)
+    #print(docNo)
     #print(tokensCounter)
 
     for element in tokensCounter:
-        dictionary.setdefault(element, {})[docNo] = tokensCounter[element]
+        dictionary.setdefault(element, {})[docNo.strip()] = tokensCounter[element]
 
-    #print(dictionary)
+
+def calculateIDF():
+    for x in dictionary:
+        idfDictionary[x] = indexDocumentFrequency(1400,len(dictionary[x]))
+
+
+
+
 
 
     '''for i in tokens:
@@ -258,5 +267,6 @@ mainOptions()
 #######################################################
 
 openDocs()
+calculateIDF()
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

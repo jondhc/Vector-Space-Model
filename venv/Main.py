@@ -5,10 +5,13 @@ import os
 import pprint
 import nltk
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 from collections import defaultdict
 from xml.dom import minidom
 import math
+import collections
 #import untangle
+dictionary = {}
 
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
     return math.log((totalNumberOfDocuments/documentsWithTermAppearance))
@@ -194,13 +197,14 @@ def mainOptions():
 
 def openDocs():
     for doc in os.listdir("./cranfield.all"):
-        print(parseDoc(doc))
+        createTermDictionary(getDocNo(doc), parseDoc(doc))
+    print(dictionary)
 
 def parseDoc(document):
     doc = minidom.parse("./cranfield.all/" + document)
     textElement = doc.getElementsByTagName('TEXT')[0]
     textContent = textElement.firstChild.data
-    print(getDocNo(document))
+    #print(getDocNo(document))
     return textContent
 
 def getDocNo(document):
@@ -209,6 +213,30 @@ def getDocNo(document):
     number = numberElement.firstChild.data
     return number
 
+def createTermDictionary(docNo, text):
+
+    stopWordsList = stopwords.words('english')
+    stopWordsList.append(",")
+    stopWordsList.append(".")
+    stopWordsSet = set(stopWordsList)
+
+    tokensList = word_tokenize(text)
+    tokensListWOStopwords = []
+    for token in tokensList:
+        if token not in stopWordsSet:
+            tokensListWOStopwords.append(token)
+    tokensCounter = collections.Counter(tokensListWOStopwords)
+    #print(tokensCounter)
+
+    for element in tokensCounter:
+        dictionary.setdefault(element, {})[docNo] = tokensCounter[element]
+
+    #print(dictionary)
+
+
+    '''for i in tokens:
+        dictionary.setdefault(i, {})
+    '''
 
 
 #######################################################
@@ -229,6 +257,6 @@ mainOptions()
 
 #######################################################
 
-#openDocs()
+openDocs()
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

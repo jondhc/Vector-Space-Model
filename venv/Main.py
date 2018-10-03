@@ -212,8 +212,10 @@ def parseDoc(document):
     doc = minidom.parse("./cranfield.all/" + document)
     textElement = doc.getElementsByTagName('TEXT')[0]
     textContent = textElement.firstChild.data
+    titleElement = doc.getElementsByTagName('TITLE')[0]
+    titleContent = textElement.firstChild.data
     #print(getDocNo(document))
-    return textContent
+    return textContent + titleContent
 
 def getDocNo(document):
     doc = minidom.parse("./cranfield.all/" + document)

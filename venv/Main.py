@@ -15,9 +15,7 @@ from operator import itemgetter
 #import untangle
 dictionary = {}
 idfDictionary = {}
-idfDoc = []
-idfQ = []
-sc = [None]*2
+relevantdictionary = {}
 
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
     return math.log10((totalNumberOfDocuments/documentsWithTermAppearance))
@@ -261,10 +259,48 @@ def vsm(query):
                     else:
                         documentResults[y] = documentResults[y] + result
     docRanking=sorted(documentResults.items(), key=itemgetter(1), reverse=True)
-    print(docRanking)
+    #print(docRanking)
     return docRanking
 
+def getRelevants():
+    with open("cranqrel", 'r', encoding='utf-8') as infile:
+        for line in infile:
+            items = line.split(" ")
+            query = items[0]
+            relevantDoc =  items[1]
+            relevantdictionary.setdefault(query,[]).append(relevantDoc)
+        #print(relevantdictionary)
+    return relevantdictionary
 
+
+def performQueries():
+    queries = {}
+    queries["1"] = "what similarity laws must be obeyed when constructing aeroelastic modelsof heated high speed aircraft ."
+    queries[
+        "2"] = "what are the structural and aeroelastic problems associated with flight of high speed aircraft ."
+    queries[
+        "4"] = "what problems of heat conduction in composite slabs have been solved so far ."
+    queries[
+        "8"] = "can a criterion be developed to show empirically the validity of flow solutions for chemically reacting gas mixtures based on the simplifying assumption of instantaneous local chemical equilibrium ."
+    queries[
+        "9"] = "what chemical kinetic system is applicable to hypersonic aerodynamic problems ."
+    queries[
+        "10"] = "what theoretical and experimental guides do we have as to turbulent couette flow behaviour ."
+    queries[
+        "12"] = "is it possible to relate the available pressure distributions for an ogive forebody at zero angle of attack to the lower surface pressures of an equivalent ogive forebody at angle of attack ."
+    queries[
+        "13"] = "what methods -dash exact or approximate -dash are presently available for predicting body pressures at angle of attack."
+    queries[
+        "15"] = "papers on internal /slip flow/ heat transfer studies ."
+    queries[
+        "18"] = "are real-gas transport properties for air available over a wide range of enthalpies and densities ."
+    for i in queries:
+        print(i)
+        print(vsm(i))
+
+def calculatePrecision():
+    relevantDocuments = getRelevants()
+    precision = ()
 
 
 #######################################################
@@ -287,7 +323,9 @@ mainOptions()
 
 openDocs()
 calculateIDF()
-vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
+#vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
+performQueries()
+
 
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

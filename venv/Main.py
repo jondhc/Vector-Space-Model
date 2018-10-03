@@ -334,16 +334,6 @@ def calculatePrecision(queryNo, vsm):
                 print("Not in range")
     graph(precisionAndRecallRanking, queryNo)
 
-def calculatePresicion(noQuery, vsm):
-    array= []
-    relevantDoc = getRelevants()[noQuery]
-    for i in vsm:
-        if i[0] in relevantDoc:
-            array.append(i[0])
-
-    noRelevantes = len(array)
-
-
 def graph(precision, queryNo):
     recall = [0,10,20,30,40,50,60,70,80,90,100]
     for i in recall:
@@ -358,8 +348,9 @@ def graph(precision, queryNo):
     b  = b + a
     #print(b)
     pyplot.plot(recall,y,'ro''-')
-    pyplot.show()
     pyplot.title(queryNo)
+    pyplot.show()
+
 
 def plotAverage():
     recall = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -368,13 +359,6 @@ def plotAverage():
     pyplot.plot(recall, b, 'ro''-')
     pyplot.title('Average')
     pyplot.show()
-
-
-
-
-
-
-
 
 #######################################################
 ###################### MAIN
@@ -396,11 +380,7 @@ mainOptions()
 
 openDocs()
 calculateIDF()
-#vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
 performQueries()
-#calculatePresicion()
 plotAverage()
 
-
-#print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

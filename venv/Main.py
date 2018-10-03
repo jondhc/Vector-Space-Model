@@ -287,22 +287,34 @@ def performQueries():
     queries["15"] = "papers on internal /slip flow/ heat transfer studies ."
     queries["18"] = "are real-gas transport properties for air available over a wide range of enthalpies and densities ."
     for i in queries:
-        #print(i)
-        #print(vsm(i))
-        calculatePrecision(i,vsm(i))
-
+        print(i)
+        print(vsm(i))
+        calculatePrecision(i, vsm(i))
+'''    print("DocNo")
+    print('1')
+    print("VSM")
+    print(vsm('1'))
+    print(len(vsm('1')))
+    print("Precision")
+    calculatePrecision('1',vsm('1'))
+    print("Relevant Docs")
+    relevants = getRelevants()
+    relevantsForQuery = set(relevants['1'])
+    print(relevantsForQuery)
+    print(len(relevantsForQuery))
+'''
 
 
 def calculatePrecision(queryNo, vsm):
     precisionAndRecallRanking = {}
     relevantDocuments = getRelevants()
-    hundredPercent = len(relevantDocuments[queryNo])
+    hundredPercent = len(set(relevantDocuments[queryNo]))
     documentPercentage = 100/hundredPercent
     retrievedAndRelevant = 0
     retrieved = 0
     for i in vsm:
         retrieved = retrieved + 1
-        if i[0] in relevantDocuments[queryNo]:
+        if i[0] in set(relevantDocuments[queryNo]):
             retrievedAndRelevant = retrievedAndRelevant + 1
             #print(retrievedAndRelevant / retrieved)
 

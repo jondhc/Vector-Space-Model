@@ -12,11 +12,14 @@ import math
 import collections
 from operator import itemgetter
 from matplotlib import pyplot
-
+import numpy
 #import untangle
 dictionary = {}
 idfDictionary = {}
 relevantdictionary = {}
+average = [0,0,0,0,0,0,0,0,0,0,0]
+b = numpy.array(average)
+
 
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
     return math.log10((totalNumberOfDocuments/documentsWithTermAppearance))
@@ -290,19 +293,6 @@ def performQueries():
         print(i)
         print(vsm(i))
         calculatePrecision(i, vsm(i))
-'''    print("DocNo")
-    print('1')
-    print("VSM")
-    print(vsm('1'))
-    print(len(vsm('1')))
-    print("Precision")
-    calculatePrecision('1',vsm('1'))
-    print("Relevant Docs")
-    relevants = getRelevants()
-    relevantsForQuery = set(relevants['1'])
-    print(relevantsForQuery)
-    print(len(relevantsForQuery))
-'''
 
 
 def calculatePrecision(queryNo, vsm):
@@ -353,8 +343,9 @@ def calculatePresicion(noQuery, vsm):
 
     noRelevantes = len(array)
 
+
 def graph(precision, queryNo):
-    recall = [0,10,20,30,40,50,60,70,80,90,100,110]
+    recall = [0,10,20,30,40,50,60,70,80,90,100]
     for i in recall:
         if i not in precision:
             precision[i] = 0
@@ -362,9 +353,24 @@ def graph(precision, queryNo):
 
     for j in precision:
         y.append(precision[j])
+    a= numpy.array(y)
+    global b
+    b  = b + a
+    #print(b)
     pyplot.plot(recall,y,'ro''-')
     pyplot.show()
     pyplot.title(queryNo)
+
+def plotAverage():
+    recall = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    for i in b:
+        i = i/len(b)
+    pyplot.plot(recall, b, 'ro''-')
+    pyplot.title('Average')
+    pyplot.show()
+
+
+
 
 
 
@@ -393,6 +399,7 @@ calculateIDF()
 #vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
 performQueries()
 #calculatePresicion()
+plotAverage()
 
 
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031

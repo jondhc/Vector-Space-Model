@@ -10,12 +10,17 @@ from collections import defaultdict
 from xml.dom import minidom
 import math
 import collections
+from operator import itemgetter
+
 #import untangle
 dictionary = {}
 idfDictionary = {}
+idfDoc = []
+idfQ = []
+sc = [None]*2
 
 def indexDocumentFrequency(totalNumberOfDocuments, documentsWithTermAppearance):
-    return math.log((totalNumberOfDocuments/documentsWithTermAppearance))
+    return math.log10((totalNumberOfDocuments/documentsWithTermAppearance))
 
 def similarityCoefficient(queryVector, documentVector):
     result = 0
@@ -199,7 +204,7 @@ def mainOptions():
 def openDocs():
     for doc in os.listdir("./cranfield.all"):
         createTermDictionary(getDocNo(doc), parseDoc(doc))
-    print(dictionary)
+    #print(dictionary)
 
 def parseDoc(document):
     doc = minidom.parse("./cranfield.all/" + document)
@@ -237,15 +242,29 @@ def createTermDictionary(docNo, text):
 def calculateIDF():
     for x in dictionary:
         idfDictionary[x] = indexDocumentFrequency(1400,len(dictionary[x]))
+    #print(idfDictionary)
+
+def vsm(query):
+    documentResults = {}
+    tokensCounter = collections.Counter(word_tokenize(query))
+    tokenizedQuery = tokenize(query)
+    for x in tokenizedQuery: #Term
+        if x in dictionary: #Term
+            if idfDictionary[x]!= 0.0:
+                for y in dictionary[x]: #Document
+                    docWeight = idfDictionary[x] * dictionary[x][y] #IDF of terms in document
+                    queryWeight = idfDictionary[x] * tokensCounter[x]
+                    result = docWeight * queryWeight
+                    if(y not in documentResults):
+                        documentResults.setdefault(y, 0)
+                        documentResults[y] = documentResults[y] + result
+                    else:
+                        documentResults[y] = documentResults[y] + result
+    docRanking=sorted(documentResults.items(), key=itemgetter(1), reverse=True)
+    print(docRanking)
+    return docRanking
 
 
-
-
-
-
-    '''for i in tokens:
-        dictionary.setdefault(i, {})
-    '''
 
 
 #######################################################
@@ -268,5 +287,7 @@ mainOptions()
 
 openDocs()
 calculateIDF()
+vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
+
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031
 

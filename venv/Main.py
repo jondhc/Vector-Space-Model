@@ -11,6 +11,7 @@ from xml.dom import minidom
 import math
 import collections
 from operator import itemgetter
+from matplotlib import pyplot
 
 #import untangle
 dictionary = {}
@@ -276,31 +277,84 @@ def getRelevants():
 def performQueries():
     queries = {}
     queries["1"] = "what similarity laws must be obeyed when constructing aeroelastic modelsof heated high speed aircraft ."
-    queries[
-        "2"] = "what are the structural and aeroelastic problems associated with flight of high speed aircraft ."
-    queries[
-        "4"] = "what problems of heat conduction in composite slabs have been solved so far ."
-    queries[
-        "8"] = "can a criterion be developed to show empirically the validity of flow solutions for chemically reacting gas mixtures based on the simplifying assumption of instantaneous local chemical equilibrium ."
-    queries[
-        "9"] = "what chemical kinetic system is applicable to hypersonic aerodynamic problems ."
-    queries[
-        "10"] = "what theoretical and experimental guides do we have as to turbulent couette flow behaviour ."
-    queries[
-        "12"] = "is it possible to relate the available pressure distributions for an ogive forebody at zero angle of attack to the lower surface pressures of an equivalent ogive forebody at angle of attack ."
-    queries[
-        "13"] = "what methods -dash exact or approximate -dash are presently available for predicting body pressures at angle of attack."
-    queries[
-        "15"] = "papers on internal /slip flow/ heat transfer studies ."
-    queries[
-        "18"] = "are real-gas transport properties for air available over a wide range of enthalpies and densities ."
+    queries["2"] = "what are the structural and aeroelastic problems associated with flight of high speed aircraft ."
+    queries["4"] = "what problems of heat conduction in composite slabs have been solved so far ."
+    queries["8"] = "can a criterion be developed to show empirically the validity of flow solutions for chemically reacting gas mixtures based on the simplifying assumption of instantaneous local chemical equilibrium ."
+    queries["9"] = "what chemical kinetic system is applicable to hypersonic aerodynamic problems ."
+    queries["10"] = "what theoretical and experimental guides do we have as to turbulent couette flow behaviour ."
+    queries["12"] = "is it possible to relate the available pressure distributions for an ogive forebody at zero angle of attack to the lower surface pressures of an equivalent ogive forebody at angle of attack ."
+    queries["13"] = "what methods -dash exact or approximate -dash are presently available for predicting body pressures at angle of attack."
+    queries["15"] = "papers on internal /slip flow/ heat transfer studies ."
+    queries["18"] = "are real-gas transport properties for air available over a wide range of enthalpies and densities ."
     for i in queries:
-        print(i)
-        print(vsm(i))
+        #print(i)
+        #print(vsm(i))
+        calculatePrecision(i,vsm(i))
 
-def calculatePrecision():
+
+
+def calculatePrecision(queryNo, vsm):
+    precisionAndRecallRanking = {}
     relevantDocuments = getRelevants()
-    precision = ()
+    hundredPercent = len(relevantDocuments[queryNo])
+    documentPercentage = 100/hundredPercent
+    retrievedAndRelevant = 0
+    retrieved = 0
+    for i in vsm:
+        retrieved = retrieved + 1
+        if i[0] in relevantDocuments[queryNo]:
+            retrievedAndRelevant = retrievedAndRelevant + 1
+            #print(retrievedAndRelevant / retrieved)
+
+            if(documentPercentage*retrievedAndRelevant < 10):
+                precisionAndRecallRanking[0] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 20):
+                precisionAndRecallRanking[10] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 30):
+                precisionAndRecallRanking[20] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 40):
+                precisionAndRecallRanking[30] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 50):
+                precisionAndRecallRanking[40] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 60):
+                precisionAndRecallRanking[50] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 70):
+                precisionAndRecallRanking[60] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 80):
+                precisionAndRecallRanking[70] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 90):
+                precisionAndRecallRanking[80] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant < 100):
+                precisionAndRecallRanking[90] = retrievedAndRelevant / retrieved
+            elif (documentPercentage * retrievedAndRelevant == 100):
+                precisionAndRecallRanking[100] = retrievedAndRelevant / retrieved
+            else:
+                print("Not in range")
+    graph(precisionAndRecallRanking)
+
+def calculatePresicion(noQuery, vsm):
+    array= []
+    relevantDoc = getRelevants()[noQuery]
+    for i in vsm:
+        if i[0] in relevantDoc:
+            array.append(i[0])
+
+    noRelevantes = len(array)
+
+def graph(precision):
+    recall = [0,10,20,30,40,50,60,70,80,90,100,110]
+    for i in recall:
+        if i not in precision:
+            precision[i] = 0
+    y = []
+
+    for j in precision:
+        y.append(precision[j])
+    pyplot.plot(recall,y,'ro''-')
+    pyplot.show()
+
+
+
 
 
 #######################################################
@@ -325,6 +379,7 @@ openDocs()
 calculateIDF()
 #vsm("what are the structural and aeroelastic problems associated with flight of high speed aircraft")
 performQueries()
+#calculatePresicion()
 
 
 #print(similarityCoefficient([0, 0, 0, 0, 0, .176, 0, 0, .477, 0, .176], [0, 0, .477, 0, .477, .176, 0, 0, 0, .176, 0])) #expectedresult = 0.031

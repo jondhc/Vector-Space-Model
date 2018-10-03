@@ -342,7 +342,7 @@ def calculatePrecision(queryNo, vsm):
                 precisionAndRecallRanking[100] = retrievedAndRelevant / retrieved
             else:
                 print("Not in range")
-    graph(precisionAndRecallRanking)
+    graph(precisionAndRecallRanking, queryNo)
 
 def calculatePresicion(noQuery, vsm):
     array= []
@@ -353,7 +353,7 @@ def calculatePresicion(noQuery, vsm):
 
     noRelevantes = len(array)
 
-def graph(precision):
+def graph(precision, queryNo):
     recall = [0,10,20,30,40,50,60,70,80,90,100,110]
     for i in recall:
         if i not in precision:
@@ -364,6 +364,7 @@ def graph(precision):
         y.append(precision[j])
     pyplot.plot(recall,y,'ro''-')
     pyplot.show()
+    pyplot.title(queryNo)
 
 
 
